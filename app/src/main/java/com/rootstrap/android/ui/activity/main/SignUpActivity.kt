@@ -1,6 +1,5 @@
 package com.rootstrap.android.ui.activity.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -31,7 +30,6 @@ class SignUpActivity : BaseActivity(), AuthView {
 
         with(binding) {
             signUpButton.setOnClickListener { signUp() }
-            signInTextView.setOnClickListener { signIn() }
         }
         lifecycle.addObserver(viewModel)
         setObservers()
@@ -39,10 +37,6 @@ class SignUpActivity : BaseActivity(), AuthView {
 
     override fun showProfile() {
         startActivityClearTask(ProfileActivity())
-    }
-
-    private fun signIn() {
-        startActivity(Intent(this, SignInActivity::class.java))
     }
 
     private fun signUp() {

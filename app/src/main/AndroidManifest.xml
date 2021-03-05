@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.activity.main.SignUpActivity"
+            android:name=".ui.activity.main.SignInActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activity.main.SignInActivity"
+            android:name=".ui.activity.main.SignUpActivity"
             android:screenOrientation="portrait" />
 
     </application>
