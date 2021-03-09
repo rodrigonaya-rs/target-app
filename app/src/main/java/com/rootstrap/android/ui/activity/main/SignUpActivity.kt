@@ -8,8 +8,9 @@ import com.rootstrap.android.databinding.ActivitySignUpBinding
 import com.rootstrap.android.metrics.Analytics
 import com.rootstrap.android.metrics.PageEvents
 import com.rootstrap.android.metrics.VISIT_SIGN_UP
-import com.rootstrap.android.network.models.User
+import com.rootstrap.android.network.models.UserSignUpRequest
 import com.rootstrap.android.ui.base.BaseActivity
+import com.rootstrap.android.ui.custom.CustomSpinnerAdapter
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.extensions.value
@@ -31,6 +32,7 @@ class SignUpActivity : BaseActivity(), AuthView {
         with(binding) {
             signUpButton.setOnClickListener { signUp() }
         }
+        setGenders()
         lifecycle.addObserver(viewModel)
         setObservers()
     }
@@ -39,15 +41,28 @@ class SignUpActivity : BaseActivity(), AuthView {
         startActivityClearTask(ProfileActivity())
     }
 
+    private fun setGenders() {
+        with(binding) {
+            CustomSpinnerAdapter(
+                this@SignUpActivity,
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.genders_array)
+            ).also { adapter ->
+                genderSpinner.adapter = adapter
+            }
+        }
+    }
+
     private fun signUp() {
         with(binding) {
-            val user = User(
+            val signUpRequest = UserSignUpRequest(
+                userName = firstNameEditText.value() + lastNameEditText.value(),
                 email = emailEditText.value(),
-                firstName = firstNameEditText.value(),
-                lastName = lastNameEditText.value(),
-                password = passwordEditText.value()
+                gender = genderSpinner.selectedItem.toString(),
+                password = passwordEditText.value(),
+                passwordConfirmation = passwordConfirmationEditText.value()
             )
-            viewModel.signUp(user)
+            viewModel.signUp(signUpRequest)
         }
     }
 

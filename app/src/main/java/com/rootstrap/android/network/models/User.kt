@@ -7,6 +7,7 @@ data class User(
     @Json(name = "email") var email: String = "",
     @Json(name = "first_name") var firstName: String = "",
     @Json(name = "last_name") var lastName: String = "",
+    @Json(name = "gender") var gender: String = "",
     @Json(name = "phone_number") var phone: String = "",
     @Json(name = "password") val password: String = "",
     @Json(name = "username") val username: String = ""

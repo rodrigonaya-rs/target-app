@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.rootstrap.android.network.managers.session.SessionManager
 import com.rootstrap.android.network.managers.user.UserManager
-import com.rootstrap.android.network.models.User
+import com.rootstrap.android.network.models.UserSignUpRequest
 import com.rootstrap.android.ui.base.BaseViewModel
 import com.rootstrap.android.util.NetworkState
 import com.rootstrap.android.util.extensions.ApiErrorType
@@ -22,10 +22,10 @@ open class SignUpActivityViewModel @ViewModelInject constructor(
     val state: LiveData<SignUpState>
         get() = _state
 
-    fun signUp(user: User) {
+    fun signUp(userSignUpRequest: UserSignUpRequest) {
         _networkState.value = NetworkState.loading
         viewModelScope.launch {
-            val result = userManager.signUp(user = user)
+            val result = userManager.signUp(userSignUpRequest = userSignUpRequest)
 
             if (result.isSuccess) {
                 result.getOrNull()?.value?.user?.let { user ->
