@@ -1,6 +1,6 @@
 <resources>
     <!-- General -->
-    <string name="app_name">RootstrapAndroidBase</string>
+    <string name="app_name">Target</string>
     <string name="ok">OK</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -15,8 +15,14 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
+    <string-array name="genders_array">
+        <item>Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
     <string name="password">Password</string>
-    <string name="got_account">Already registered? Sign in!</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
 
     <!-- Sign In -->

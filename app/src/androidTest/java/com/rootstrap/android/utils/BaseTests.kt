@@ -10,6 +10,7 @@ import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
@@ -51,7 +52,7 @@ open class BaseTests {
         "user123@mail.com",
         "Richard",
         "Richard",
-        "99090909",
+        "Female",
         "asdasdasdasda",
         "Richard"
     )
@@ -64,6 +65,14 @@ open class BaseTests {
             typeText(text),
             closeSoftKeyboard()
         )
+    }
+
+    open fun scrollAndSelectItem(id: Int, selectionText: String) {
+        onView(withId(id)).perform(
+            scrollTo(),
+            click()
+        )
+        onView(withText(selectionText)).perform(click())
     }
 
     open fun typeText(id: Int, text: String) {

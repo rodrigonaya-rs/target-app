@@ -3,7 +3,6 @@
 echo "Running git pre-commit hook"
 
 ./gradlew ktlintFormat
-git add .
 
 git stash -q --keep-index
 

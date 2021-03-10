@@ -1,6 +1,7 @@
 package com.rootstrap.android.ui.activity.main
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -30,7 +31,10 @@ class SignInActivity : PermissionActivity(), AuthView {
         setContentView(binding.root)
         Analytics.track(PageEvents.visit(VISIT_SIGN_IN))
 
-        binding.signInButton.setOnClickListener { signIn() }
+        with(binding) {
+            signInButton.setOnClickListener { signIn() }
+            signUpTextView.setOnClickListener { signUp() }
+        }
 
         lifecycle.addObserver(viewModel)
 
@@ -50,6 +54,10 @@ class SignInActivity : PermissionActivity(), AuthView {
             )
             viewModel.signIn(user)
         }
+    }
+
+    private fun signUp() {
+        startActivity(Intent(this, SignUpActivity::class.java))
     }
 
     private fun setObservers() {

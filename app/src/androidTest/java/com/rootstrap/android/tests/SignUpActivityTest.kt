@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.rootstrap.android.R
 import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.ui.activity.main.ProfileActivity
-import com.rootstrap.android.ui.activity.main.SignInActivity
 import com.rootstrap.android.ui.activity.main.SignUpActivity
 import com.rootstrap.android.utils.BaseTests
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -38,7 +37,9 @@ class SignUpActivityTest : BaseTests() {
         scrollAndTypeText(R.id.first_name_edit_text, testUser.firstName)
         scrollAndTypeText(R.id.last_name_edit_text, testUser.lastName)
         scrollAndTypeText(R.id.email_edit_text, testUser.email)
+        scrollAndSelectItem(R.id.gender_spinner, testUser.gender)
         scrollAndTypeText(R.id.password_edit_text, testUser.password)
+        scrollAndTypeText(R.id.password_confirmation_edit_text, testUser.password)
         scrollAndPerformClick(R.id.sign_up_button)
         val user = sessionManager.user
         assertEquals(user, testUser)
@@ -46,16 +47,6 @@ class SignUpActivityTest : BaseTests() {
         activity.runOnUiThread {
             val current = currentActivity()
             assertEquals(ProfileActivity::class.java.name, current::class.java.name)
-        }
-    }
-
-    @Test
-    fun checkCTASignIn() {
-        scenario.recreate()
-        scrollAndPerformClick(R.id.sign_in_text_view)
-        activity.runOnUiThread {
-            val current = currentActivity()
-            assertEquals(SignInActivity::class.java.name, current::class.java.name)
         }
     }
 
