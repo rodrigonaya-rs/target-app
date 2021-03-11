@@ -12,17 +12,17 @@
     <string name="error">ERROR</string>
 
     <!-- Sign Up -->
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
+    <string name="name">Name</string>
     <string name="email">Email</string>
-    <string-array name="genders_array">
-        <item>Gender</item>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="gender">Gender</string>
+    <string name="select_gender">Select gender</string>
+    <string-array name="genders">
         <item>Male</item>
         <item>Female</item>
         <item>Other</item>
     </string-array>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">Sign Up</string>
 
     <!-- Sign In -->

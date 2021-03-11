@@ -42,7 +42,7 @@ class SignUpActivityTest : BaseTests() {
         setServerDispatch(signUpDispatcher())
         val testUser = testUser()
         populateUserData(testUser)
-        scrollAndPerformClick(R.id.sign_up_button)
+        signUp()
         val user = sessionManager.user
         assertEquals(user, testUser)
 
@@ -58,7 +58,7 @@ class SignUpActivityTest : BaseTests() {
         setServerDispatch(unsuccessfulSignUpDispatcher())
         val testUser = testUser()
         populateUserData(testUser)
-        scrollAndPerformClick(R.id.sign_up_button)
+        signUp()
         onView(withText(R.string.error))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
@@ -70,12 +70,15 @@ class SignUpActivityTest : BaseTests() {
     }
 
     private fun populateUserData(user: User) {
-        scrollAndTypeText(R.id.first_name_edit_text, user.firstName)
-        scrollAndTypeText(R.id.last_name_edit_text, user.lastName)
+        scrollAndTypeText(R.id.name_edit_text, user.firstName)
         scrollAndTypeText(R.id.email_edit_text, user.email)
-        scrollAndSelectItem(R.id.gender_spinner, user.gender)
         scrollAndTypeText(R.id.password_edit_text, user.password)
         scrollAndTypeText(R.id.password_confirmation_edit_text, user.password)
+        scrollAndSelectItem(R.id.gender_edit_text, user.gender)
+    }
+
+    private fun signUp() {
+        scrollAndPerformClick(R.id.sign_up_button)
     }
 
     private fun signUpDispatcher(): Dispatcher {

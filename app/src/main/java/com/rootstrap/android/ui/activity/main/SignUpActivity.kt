@@ -1,6 +1,8 @@
 package com.rootstrap.android.ui.activity.main
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.rootstrap.android.R
@@ -10,17 +12,19 @@ import com.rootstrap.android.metrics.PageEvents
 import com.rootstrap.android.metrics.VISIT_SIGN_UP
 import com.rootstrap.android.network.models.UserSignUpRequest
 import com.rootstrap.android.ui.base.BaseActivity
-import com.rootstrap.android.ui.custom.CustomSpinnerAdapter
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
+import com.rootstrap.android.util.extensions.removeWhitespaces
 import com.rootstrap.android.util.extensions.value
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class SignUpActivity : BaseActivity(), AuthView {
 
     private val viewModel: SignUpActivityViewModel by viewModels()
     private lateinit var binding: ActivitySignUpBinding
+    private lateinit var gendersDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,37 +32,53 @@ class SignUpActivity : BaseActivity(), AuthView {
 
         setContentView(binding.root)
         Analytics.track(PageEvents.visit(VISIT_SIGN_UP))
+        initGendersDialog()
 
         with(binding) {
+            genderEditText.onFocusChangeListener = View.OnFocusChangeListener { _, focused ->
+                if (focused)
+                    showGenderDialog()
+            }
+            genderEditText.setOnClickListener { showGenderDialog() }
             signUpButton.setOnClickListener { signUp() }
         }
-        setGenders()
         lifecycle.addObserver(viewModel)
         setObservers()
+    }
+
+    private fun initGendersDialog() {
+        gendersDialog = AlertDialog.Builder(this).also {
+            it.setTitle(R.string.select_gender)
+            it.setCancelable(false)
+            val genders = resources.getStringArray(R.array.genders)
+            it.setItems(genders) { _, position ->
+                with(binding) {
+                    genderEditText.setText(genders[position])
+                    genderEditText.isEnabled = true
+                }
+            }
+        }.create()
     }
 
     override fun showProfile() {
         startActivityClearTask(ProfileActivity())
     }
 
-    private fun setGenders() {
-        with(binding) {
-            CustomSpinnerAdapter(
-                this@SignUpActivity,
-                android.R.layout.simple_spinner_dropdown_item,
-                resources.getStringArray(R.array.genders_array)
-            ).also { adapter ->
-                genderSpinner.adapter = adapter
+    private fun showGenderDialog() {
+        if (!gendersDialog.isShowing) {
+            with(binding) {
+                genderEditText.isEnabled = false
             }
+            gendersDialog.show()
         }
     }
 
     private fun signUp() {
         with(binding) {
             val signUpRequest = UserSignUpRequest(
-                userName = firstNameEditText.value() + lastNameEditText.value(),
+                userName = nameEditText.value().removeWhitespaces().toLowerCase(Locale.ROOT),
                 email = emailEditText.value(),
-                gender = genderSpinner.selectedItem.toString(),
+                gender = genderEditText.value().toLowerCase(Locale.ROOT),
                 password = passwordEditText.value(),
                 passwordConfirmation = passwordConfirmationEditText.value()
             )
