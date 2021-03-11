@@ -103,6 +103,9 @@ class SignUpActivity : BaseActivity(), AuthView {
             if (!passwordConfirmationEditText.isNotEmpty()) {
                 passwordConfirmationTextInputLayout.error = getString(R.string.missing_confirm_password_error)
                 errors = true
+            } else if (passwordConfirmationEditText.text != passwordEditText.text) {
+                passwordConfirmationTextInputLayout.error = getString(R.string.confirm_password_match_error)
+                errors = true
             }
             if (!genderEditText.isNotEmpty()) {
                 genderTextInputLayout.error = getString(R.string.missing_gender_error)

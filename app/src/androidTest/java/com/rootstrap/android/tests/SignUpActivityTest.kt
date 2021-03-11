@@ -102,12 +102,23 @@ class SignUpActivityTest : BaseTests() {
     }
 
     @Test
-    fun signUpShotPasswordTest() {
+    fun signUpShortPasswordTest() {
         scenario.recreate()
         scrollAndTypeText(R.id.password_edit_text, "12345")
         signUp()
         onView(withId(R.id.password_text_input_layout)).check(
                 matches(hasTextInputLayoutError(R.string.short_password_error))
+        )
+    }
+
+    @Test
+    fun signUpPasswordDoesNotMatchTest() {
+        scenario.recreate()
+        scrollAndTypeText(R.id.password_edit_text, "12345678")
+        scrollAndTypeText(R.id.password_confirmation_edit_text, "12345679")
+        signUp()
+        onView(withId(R.id.password_confirmation_text_input_layout)).check(
+                matches(hasTextInputLayoutError(R.string.confirm_password_match_error))
         )
     }
 
