@@ -101,6 +101,16 @@ class SignUpActivityTest : BaseTests() {
         )
     }
 
+    @Test
+    fun signUpShotPasswordTest() {
+        scenario.recreate()
+        scrollAndTypeText(R.id.password_edit_text, "12345")
+        signUp()
+        onView(withId(R.id.password_text_input_layout)).check(
+                matches(hasTextInputLayoutError(R.string.short_password_error))
+        )
+    }
+
     private fun populateUserData(user: User) {
         scrollAndTypeText(R.id.name_edit_text, user.firstName)
         scrollAndTypeText(R.id.email_edit_text, user.email)

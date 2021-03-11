@@ -28,6 +28,10 @@ class SignUpActivity : BaseActivity(), AuthView {
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var gendersDialog: AlertDialog
 
+    companion object {
+        const val MIN_PASSWORD_LENGTH = 8
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
@@ -91,6 +95,9 @@ class SignUpActivity : BaseActivity(), AuthView {
             }
             if (!passwordEditText.isNotEmpty()) {
                 passwordTextInputLayout.error = getString(R.string.missing_password_error)
+                errors = true
+            } else if (passwordEditText.text!!.length < MIN_PASSWORD_LENGTH) {
+                passwordTextInputLayout.error = getString(R.string.short_password_error)
                 errors = true
             }
             if (!passwordConfirmationEditText.isNotEmpty()) {
