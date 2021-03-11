@@ -91,6 +91,16 @@ class SignUpActivityTest : BaseTests() {
         )
     }
 
+    @Test
+    fun signUpInvalidEmailTest() {
+        scenario.recreate()
+        scrollAndTypeText(R.id.email_edit_text, "hello@world")
+        signUp()
+        onView(withId(R.id.email_text_input_layout)).check(
+                matches(hasTextInputLayoutError(R.string.email_not_valid_error))
+        )
+    }
+
     private fun populateUserData(user: User) {
         scrollAndTypeText(R.id.name_edit_text, user.firstName)
         scrollAndTypeText(R.id.email_edit_text, user.email)

@@ -16,6 +16,7 @@
     <string name="missing_name_error">You forgot to put your name!</string>
     <string name="email">Email</string>
     <string name="missing_email_error">You forgot to put your email!</string>
+    <string name="email_not_valid_error">Oops! This email is not valid</string>
     <string name="password">Password</string>
     <string name="missing_password_error">You forgot to put your password!</string>
     <string name="confirm_password">Confirm Password</string>

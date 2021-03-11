@@ -14,6 +14,7 @@ import com.rootstrap.android.network.models.UserSignUpRequest
 import com.rootstrap.android.ui.base.BaseActivity
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
+import com.rootstrap.android.util.extensions.isEmail
 import com.rootstrap.android.util.extensions.isNotEmpty
 import com.rootstrap.android.util.extensions.removeWhitespaces
 import com.rootstrap.android.util.extensions.value
@@ -83,6 +84,9 @@ class SignUpActivity : BaseActivity(), AuthView {
             }
             if (!emailEditText.isNotEmpty()) {
                 emailTextInputLayout.error = getString(R.string.missing_email_error)
+                errors = true
+            } else if (!emailEditText.value().isEmail()) {
+                emailTextInputLayout.error = getString(R.string.email_not_valid_error)
                 errors = true
             }
             if (!passwordEditText.isNotEmpty()) {
