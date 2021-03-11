@@ -6,6 +6,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.gson.Gson
 import com.rootstrap.android.R
@@ -67,6 +68,27 @@ class SignUpActivityTest : BaseTests() {
             val current = currentActivity()
             assertEquals(SignUpActivity::class.java.name, current::class.java.name)
         }
+    }
+
+    @Test
+    fun signUpMissingInformationTest() {
+        scenario.recreate()
+        signUp()
+        onView(withId(R.id.name_text_input_layout)).check(
+            matches(hasTextInputLayoutError(R.string.missing_name_error))
+        )
+        onView(withId(R.id.email_text_input_layout)).check(
+            matches(hasTextInputLayoutError(R.string.missing_email_error))
+        )
+        onView(withId(R.id.password_text_input_layout)).check(
+            matches(hasTextInputLayoutError(R.string.missing_password_error))
+        )
+        onView(withId(R.id.password_confirmation_text_input_layout)).check(
+            matches(hasTextInputLayoutError(R.string.missing_confirm_password_error))
+        )
+        onView(withId(R.id.gender_text_input_layout)).check(
+            matches(hasTextInputLayoutError(R.string.missing_gender_error))
+        )
     }
 
     private fun populateUserData(user: User) {

@@ -13,10 +13,15 @@
 
     <!-- Sign Up -->
     <string name="name">Name</string>
+    <string name="missing_name_error">You forgot to put your name!</string>
     <string name="email">Email</string>
+    <string name="missing_email_error">You forgot to put your email!</string>
     <string name="password">Password</string>
+    <string name="missing_password_error">You forgot to put your password!</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="missing_confirm_password_error">You forgot to confirm your password!</string>
     <string name="gender">Gender</string>
+    <string name="missing_gender_error">You forgot to select your <gender></gender>!</string>
     <string name="select_gender">Select gender</string>
     <string-array name="genders">
         <item>Male</item>

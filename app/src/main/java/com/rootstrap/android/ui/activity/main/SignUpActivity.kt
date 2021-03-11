@@ -14,6 +14,7 @@ import com.rootstrap.android.network.models.UserSignUpRequest
 import com.rootstrap.android.ui.base.BaseActivity
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
+import com.rootstrap.android.util.extensions.isNotEmpty
 import com.rootstrap.android.util.extensions.removeWhitespaces
 import com.rootstrap.android.util.extensions.value
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,6 +76,31 @@ class SignUpActivity : BaseActivity(), AuthView {
 
     private fun signUp() {
         with(binding) {
+            var errors = false
+            if (!nameEditText.isNotEmpty()) {
+                nameTextInputLayout.error = getString(R.string.missing_name_error)
+                errors = true
+            }
+            if (!emailEditText.isNotEmpty()) {
+                emailTextInputLayout.error = getString(R.string.missing_email_error)
+                errors = true
+            }
+            if (!passwordEditText.isNotEmpty()) {
+                passwordTextInputLayout.error = getString(R.string.missing_password_error)
+                errors = true
+            }
+            if (!passwordConfirmationEditText.isNotEmpty()) {
+                passwordConfirmationTextInputLayout.error = getString(R.string.missing_confirm_password_error)
+                errors = true
+            }
+            if (!genderEditText.isNotEmpty()) {
+                genderTextInputLayout.error = getString(R.string.missing_gender_error)
+                errors = true
+            }
+
+            if (errors)
+                return
+
             val signUpRequest = UserSignUpRequest(
                 userName = nameEditText.value().removeWhitespaces().toLowerCase(Locale.ROOT),
                 email = emailEditText.value(),
