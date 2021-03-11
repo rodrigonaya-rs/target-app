@@ -58,7 +58,7 @@ open class BaseTests {
         "Richard",
         "Female",
         "asdasdasdasda",
-        "Richard"
+        "12345678"
     )
 
     open fun scrollAndTypeText(id: Int, text: String) {
