@@ -24,13 +24,14 @@
     <string name="missing_confirm_password_error">You forgot to confirm your password!</string>
     <string name="confirm_password_match_error">Your password does not match!</string>
     <string name="gender">Gender</string>
-    <string name="missing_gender_error">You forgot to select your <gender></gender>!</string>
+    <string name="missing_gender_error">You forgot to select your gender!</string>
     <string name="select_gender">Select gender</string>
     <string-array name="genders">
         <item>Male</item>
         <item>Female</item>
         <item>Other</item>
     </string-array>
+    <string name="default_input_validation_error">Please review</string>
     <string name="sign_up">Sign Up</string>
 
     <!-- Sign In -->

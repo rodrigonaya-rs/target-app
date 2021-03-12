@@ -21,8 +21,3 @@ fun EditText.validate(pattern: String): Boolean =
  * Validate [EditText] doesn't have a null value
  * */
 fun EditText.isNotEmpty() = value().isNotEmpty()
-
-/**
- * Remove whitespaces from the given string
- * */
-fun String.removeWhitespaces() = this.replace("\\s".toRegex(), "")

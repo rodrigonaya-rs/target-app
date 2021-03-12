@@ -14,9 +14,11 @@ import com.rootstrap.android.network.models.UserSignUpRequest
 import com.rootstrap.android.ui.base.BaseActivity
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
-import com.rootstrap.android.util.extensions.isEmail
-import com.rootstrap.android.util.extensions.isNotEmpty
 import com.rootstrap.android.util.extensions.removeWhitespaces
+import com.rootstrap.android.util.extensions.validateIsEmail
+import com.rootstrap.android.util.extensions.validateLength
+import com.rootstrap.android.util.extensions.validateNotEmpty
+import com.rootstrap.android.util.extensions.validateSameContent
 import com.rootstrap.android.util.extensions.value
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -81,38 +83,17 @@ class SignUpActivity : BaseActivity(), AuthView {
 
     private fun signUp() {
         with(binding) {
-            var errors = false
-            if (!nameEditText.isNotEmpty()) {
-                nameTextInputLayout.error = getString(R.string.missing_name_error)
-                errors = true
-            }
-            if (!emailEditText.isNotEmpty()) {
-                emailTextInputLayout.error = getString(R.string.missing_email_error)
-                errors = true
-            } else if (!emailEditText.value().isEmail()) {
-                emailTextInputLayout.error = getString(R.string.email_not_valid_error)
-                errors = true
-            }
-            if (!passwordEditText.isNotEmpty()) {
-                passwordTextInputLayout.error = getString(R.string.missing_password_error)
-                errors = true
-            } else if (passwordEditText.text!!.length < MIN_PASSWORD_LENGTH) {
-                passwordTextInputLayout.error = getString(R.string.short_password_error)
-                errors = true
-            }
-            if (!passwordConfirmationEditText.isNotEmpty()) {
-                passwordConfirmationTextInputLayout.error = getString(R.string.missing_confirm_password_error)
-                errors = true
-            } else if (passwordConfirmationEditText.text.toString() != passwordEditText.text.toString()) {
-                passwordConfirmationTextInputLayout.error = getString(R.string.confirm_password_match_error)
-                errors = true
-            }
-            if (!genderEditText.isNotEmpty()) {
-                genderTextInputLayout.error = getString(R.string.missing_gender_error)
-                errors = true
-            }
-
-            if (errors)
+            val validationResult = listOf(
+                    nameTextInputLayout.validateNotEmpty(R.string.missing_name_error),
+                    emailTextInputLayout.validateNotEmpty(R.string.missing_email_error) &&
+                    emailTextInputLayout.validateIsEmail(R.string.email_not_valid_error),
+                    passwordTextInputLayout.validateNotEmpty(R.string.missing_password_error) &&
+                    passwordTextInputLayout.validateLength(MIN_PASSWORD_LENGTH, R.string.short_password_error),
+                    passwordConfirmationTextInputLayout.validateNotEmpty(R.string.missing_confirm_password_error) &&
+                    passwordConfirmationTextInputLayout.validateSameContent(passwordTextInputLayout, R.string.confirm_password_match_error),
+                    genderTextInputLayout.validateNotEmpty(R.string.missing_gender_error)
+            )
+            if (validationResult.contains(false))
                 return
 
             val signUpRequest = UserSignUpRequest(
