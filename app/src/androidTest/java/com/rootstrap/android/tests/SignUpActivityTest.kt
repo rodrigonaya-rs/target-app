@@ -122,6 +122,27 @@ class SignUpActivityTest : BaseTests() {
         )
     }
 
+    @Test
+    fun signUpSuccessfulAfterUpdatingInvalidData() {
+        scenario.recreate()
+        setServerDispatch(signUpDispatcher())
+        val testUser = testUser()
+        val wrongTestUser = testUser.copy(email = "test@test")
+        populateUserData(wrongTestUser)
+        signUp()
+        onView(withId(R.id.email_text_input_layout)).check(
+                matches(hasTextInputLayoutError(R.string.email_not_valid_error))
+        )
+        scrollAndTypeText(R.id.email_edit_text, testUser.email)
+        signUp()
+        val user = sessionManager.user
+        assertEquals(user, testUser)
+        activity.runOnUiThread {
+            val current = currentActivity()
+            assertEquals(ProfileActivity::class.java.name, current::class.java.name)
+        }
+    }
+
     private fun populateUserData(user: User) {
         scrollAndTypeText(R.id.name_edit_text, user.firstName)
         scrollAndTypeText(R.id.email_edit_text, user.email)

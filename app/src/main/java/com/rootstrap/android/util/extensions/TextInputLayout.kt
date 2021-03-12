@@ -10,6 +10,8 @@ fun TextInputLayout.validateNotEmpty(errorMessageResource: Int): Boolean {
         this.error = this.context.getString(errorMessageResource)
         return false
     }
+
+    this.error = null
     return true
 }
 
@@ -21,6 +23,8 @@ fun TextInputLayout.validateIsEmail(errorMessageResource: Int): Boolean {
         this.error = this.context.getString(errorMessageResource)
         return false
     }
+
+    this.error = null
     return true
 }
 
@@ -32,6 +36,8 @@ fun TextInputLayout.validateLength(minLength: Int, errorMessageResource: Int): B
         this.error = this.context.getString(errorMessageResource)
         return false
     }
+
+    this.error = null
     return true
 }
 
@@ -43,5 +49,7 @@ fun TextInputLayout.validateSameContent(compareTo: TextInputLayout, errorMessage
         this.error = this.context.getString(errorMessageResource)
         return false
     }
+
+    this.error = null
     return true
 }
