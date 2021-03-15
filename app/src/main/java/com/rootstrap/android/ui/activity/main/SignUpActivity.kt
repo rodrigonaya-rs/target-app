@@ -49,6 +49,7 @@ class SignUpActivity : BaseActivity(), AuthView {
             }
             genderEditText.setOnClickListener { showGenderDialog() }
             signUpButton.setOnClickListener { signUp() }
+            signInTextView.setOnClickListener { signIn() }
         }
         lifecycle.addObserver(viewModel)
         setObservers()
@@ -105,6 +106,10 @@ class SignUpActivity : BaseActivity(), AuthView {
             )
             viewModel.signUp(signUpRequest)
         }
+    }
+
+    private fun signIn() {
+        onBackPressed()
     }
 
     private fun setObservers() {

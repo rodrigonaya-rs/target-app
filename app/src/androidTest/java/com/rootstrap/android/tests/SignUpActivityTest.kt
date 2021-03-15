@@ -13,6 +13,7 @@ import com.rootstrap.android.R
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.ui.activity.main.ProfileActivity
+import com.rootstrap.android.ui.activity.main.SignInActivity
 import com.rootstrap.android.ui.activity.main.SignUpActivity
 import com.rootstrap.android.utils.BaseTests
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -28,13 +29,17 @@ import org.junit.Test
 class SignUpActivityTest : BaseTests() {
 
     private lateinit var activity: SignUpActivity
+    private lateinit var signInActivity: SignInActivity
     private lateinit var scenario: ActivityScenario<SignUpActivity>
+    private lateinit var signInScenario: ActivityScenario<SignInActivity>
 
     @Before
     override fun before() {
         super.before()
         scenario = ActivityScenario.launch(SignUpActivity::class.java)
         scenario.onActivity { activity -> this.activity = activity }
+        signInScenario = ActivityScenario.launch(SignInActivity::class.java)
+        signInScenario.onActivity { activity -> this.signInActivity = activity }
     }
 
     @Test
@@ -140,6 +145,17 @@ class SignUpActivityTest : BaseTests() {
         activity.runOnUiThread {
             val current = currentActivity()
             assertEquals(ProfileActivity::class.java.name, current::class.java.name)
+        }
+    }
+
+    @Test
+    fun backToSignInNavigation() {
+        signInScenario.recreate()
+        onView(withId(R.id.sign_up_text_view)).perform(click())
+        onView(withId(R.id.sign_in_text_view)).perform(click())
+        signInActivity.runOnUiThread {
+            val current = currentActivity()
+            assertEquals(SignInActivity::class.java.name, current::class.java.name)
         }
     }
 
