@@ -20,5 +20,27 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">0.15</item>
+        <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="FormInput" />
+
+    <style name="FormInput.Title" parent="Text.Title">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="FormInput.EditText" parent="Text">
+        <item name="android:background">@drawable/bg_form_input_edit_text</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.09</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="FormInput.Error" parent="Text">
+        <item name="android:textColor">@color/inputErrorColor</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>
