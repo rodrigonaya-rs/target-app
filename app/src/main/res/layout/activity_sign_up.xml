@@ -66,6 +66,7 @@
                 android:title="@string/password"
                 android:inputType="textPassword"
                 android:imeOptions="actionNext"
+                android:hint="@string/password_hint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/email_form_input" />

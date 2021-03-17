@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.doAfterTextChanged
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ViewFormInputBinding
 import com.rootstrap.android.util.extensions.isEmail
@@ -26,6 +27,11 @@ class FormInput @JvmOverloads constructor(
         layoutInflater.inflate(R.layout.view_form_input, this, true)
         binding = ViewFormInputBinding.inflate(layoutInflater, this, true)
 
+        binding.inputEditText.doAfterTextChanged { clearError() }
+        setAttributes(attrs)
+    }
+
+    private fun setAttributes(attrs: AttributeSet?) {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.FormInput)
 
         if (typedArray.hasValue(R.styleable.FormInput_android_title))
@@ -38,7 +44,7 @@ class FormInput @JvmOverloads constructor(
             binding.inputEditText.inputType = typedArray.getInt(R.styleable.FormInput_android_inputType, InputType.TYPE_CLASS_TEXT)
 
         if (typedArray.hasValue(R.styleable.FormInput_android_imeOptions))
-            binding.inputEditText.imeOptions = typedArray.getInt(R.styleable.FormInput_android_imeOptions, EditorInfo.IME_ACTION_NONE)
+            binding.inputEditText.imeOptions = typedArray.getInt(R.styleable.FormInput_android_imeOptions, EditorInfo.IME_ACTION_NEXT)
 
         typedArray.recycle()
     }
@@ -112,12 +118,13 @@ class FormInput @JvmOverloads constructor(
     }
 
     private fun setError(errorResource: Int) {
-        // Red border
+        binding.inputEditText.setBackgroundResource(R.drawable.bg_form_input_edit_text_error)
         binding.errorTextView.visibility = VISIBLE
         binding.errorTextView.text = context.getString(errorResource)
     }
 
     private fun clearError() {
+        binding.inputEditText.setBackgroundResource(R.drawable.bg_form_input_edit_text)
         binding.errorTextView.visibility = INVISIBLE
     }
 }
