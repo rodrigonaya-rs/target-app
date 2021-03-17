@@ -5,9 +5,13 @@ import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ViewFormInputBinding
+import com.rootstrap.android.util.extensions.isEmail
+import com.rootstrap.android.util.extensions.isNotEmpty
+import com.rootstrap.android.util.extensions.value
 import java.util.Locale
 
 class FormInput @JvmOverloads constructor(
@@ -39,12 +43,81 @@ class FormInput @JvmOverloads constructor(
         typedArray.recycle()
     }
 
-    fun setError(errorResource: Int) {
+    fun setInputClickable(onClick: () -> Unit) {
+        binding.inputEditText.setOnClickListener { onClick.invoke() }
+        binding.inputEditText.isFocusable = false
+    }
+
+    fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
+        binding.inputEditText.setOnEditorActionListener(listener)
+    }
+
+    override fun clearFocus() {
+        binding.inputEditText.clearFocus()
+    }
+
+    override fun isEnabled(): Boolean {
+        return binding.inputEditText.isEnabled
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        binding.inputEditText.isEnabled = enabled
+    }
+
+    fun setText(text: String) {
+        binding.inputEditText.setText(text)
+        clearError()
+    }
+
+    fun value() = binding.inputEditText.value()
+
+    fun validateNotEmpty(errorMessageResource: Int): Boolean {
+        if (!binding.inputEditText.isNotEmpty()) {
+            setError(errorMessageResource)
+            return false
+        }
+
+        clearError()
+        return true
+    }
+
+    fun validateIsEmail(errorMessageResource: Int): Boolean {
+        if (binding.inputEditText.isNotEmpty() && binding.inputEditText.value().isEmail()) {
+            setError(errorMessageResource)
+            return false
+        }
+
+        clearError()
+        return true
+    }
+
+    fun validateLength(minLength: Int, errorMessageResource: Int): Boolean {
+        if (binding.inputEditText.isNotEmpty() && binding.inputEditText.text.length < minLength) {
+            setError(errorMessageResource)
+            return false
+        }
+
+        clearError()
+        return true
+    }
+
+    fun validateSameContent(compareTo: FormInput, errorMessageResource: Int): Boolean {
+        if (binding.inputEditText.isNotEmpty() && binding.inputEditText.value() != compareTo.value()) {
+            setError(errorMessageResource)
+            return false
+        }
+
+        clearError()
+        return true
+    }
+
+    private fun setError(errorResource: Int) {
+        // Red border
         binding.errorTextView.visibility = VISIBLE
         binding.errorTextView.text = context.getString(errorResource)
     }
 
-    fun clearError() {
+    private fun clearError() {
         binding.errorTextView.visibility = INVISIBLE
     }
 }
