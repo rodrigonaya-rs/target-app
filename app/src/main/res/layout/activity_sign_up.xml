@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 style="@style/Text.Title"
-                android:layout_marginTop="@dimen/text_input_margin_top"
+                android:layout_marginTop="@dimen/text_input_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -38,7 +38,7 @@
                 android:id="@+id/name_form_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_input_margin_top"
+                android:layout_marginTop="@dimen/text_input_margin"
                 android:title="@string/name"
                 android:inputType="textCapWords"
                 android:imeOptions="actionNext"
@@ -50,7 +50,7 @@
                 android:id="@+id/email_form_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_input_margin_top"
+                android:layout_marginTop="@dimen/text_input_margin"
                 android:title="@string/email"
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionNext"
@@ -62,7 +62,7 @@
                 android:id="@+id/password_form_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_input_margin_top"
+                android:layout_marginTop="@dimen/text_input_margin"
                 android:title="@string/password"
                 android:inputType="textPassword"
                 android:imeOptions="actionNext"
@@ -75,7 +75,7 @@
                 android:id="@+id/password_confirmation_form_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_input_margin_top"
+                android:layout_marginTop="@dimen/text_input_margin"
                 android:title="@string/confirm_password"
                 android:inputType="textPassword"
                 android:imeOptions="actionNext"
@@ -87,7 +87,7 @@
                 android:id="@+id/gender_form_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_input_margin_top"
+                android:layout_marginTop="@dimen/text_input_margin"
                 android:title="@string/gender"
                 android:inputType="none"
                 android:imeOptions="actionDone"
@@ -99,22 +99,38 @@
                 android:id="@+id/sign_up_button"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/action_button_height"
-                android:layout_marginTop="@dimen/text_input_margin_top"
-                android:background="@color/colorAccent"
+                android:layout_marginTop="@dimen/text_input_margin"
+                android:layout_marginStart="@dimen/sign_up_button_margin_horizontal"
+                android:layout_marginEnd="@dimen/sign_up_button_margin_horizontal"
+                android:background="@android:color/black"
                 android:text="@string/sign_up"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gender_form_input" />
 
+            <View
+                android:id="@+id/divider_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_marginTop="@dimen/text_input_margin"
+                android:layout_marginStart="@dimen/sign_up_margin_horizontal"
+                android:layout_marginEnd="@dimen/sign_up_margin_horizontal"
+                app:layout_constraintTop_toBottomOf="@id/sign_up_button"
+                app:layout_constraintStart_toStartOf="@id/sign_up_button"
+                app:layout_constraintEnd_toEndOf="@id/sign_up_button" />
+
             <TextView
                 android:id="@+id/sign_in_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_input_margin"
+                style="@style/Text.Body"
                 android:text="@string/sign_in"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sign_up_button" />
+                app:layout_constraintTop_toBottomOf="@id/divider_view" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

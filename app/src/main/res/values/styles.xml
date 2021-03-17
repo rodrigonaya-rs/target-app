@@ -23,6 +23,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Text.Body" parent="Text.Title">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
     <style name="FormInput" />
 
     <style name="FormInput.Title" parent="Text.Title">
