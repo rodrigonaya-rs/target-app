@@ -21,7 +21,3 @@ fun EditText.validate(pattern: String): Boolean =
  * Validate [EditText] doesn't have a null value
  * */
 fun EditText.isNotEmpty() = value().isNotEmpty()
-
-/**
- * Add more extensions in case you need it
- * */

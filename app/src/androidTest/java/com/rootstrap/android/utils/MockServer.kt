@@ -45,4 +45,9 @@ object MockServer {
         .addHeader("Connection", "close")
         .setResponseCode(401)
         .setBody("{ }")
+
+    fun customResponse(errorCode: Int) = MockResponse()
+        .addHeader("Connection", "close")
+        .setResponseCode(errorCode)
+        .setBody("{ }")
 }
