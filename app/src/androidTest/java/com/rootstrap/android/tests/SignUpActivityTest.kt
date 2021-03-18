@@ -3,6 +3,8 @@ package com.rootstrap.android.tests
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -13,9 +15,11 @@ import com.rootstrap.android.R
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.ui.activity.main.ProfileActivity
-import com.rootstrap.android.ui.activity.main.SignInActivity
 import com.rootstrap.android.ui.activity.main.SignUpActivity
 import com.rootstrap.android.utils.BaseTests
+import com.rootstrap.android.utils.ClearTextOnFormInput
+import com.rootstrap.android.utils.TypeTextOnFormInput
+import com.rootstrap.android.utils.hasFormInputError
 import dagger.hilt.android.testing.HiltAndroidTest
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -29,17 +33,13 @@ import org.junit.Test
 class SignUpActivityTest : BaseTests() {
 
     private lateinit var activity: SignUpActivity
-    private lateinit var signInActivity: SignInActivity
     private lateinit var scenario: ActivityScenario<SignUpActivity>
-    private lateinit var signInScenario: ActivityScenario<SignInActivity>
 
     @Before
     override fun before() {
         super.before()
         scenario = ActivityScenario.launch(SignUpActivity::class.java)
         scenario.onActivity { activity -> this.activity = activity }
-        signInScenario = ActivityScenario.launch(SignInActivity::class.java)
-        signInScenario.onActivity { activity -> this.signInActivity = activity }
     }
 
     @Test
@@ -79,51 +79,51 @@ class SignUpActivityTest : BaseTests() {
     fun signUpMissingInformationTest() {
         scenario.recreate()
         signUp()
-        onView(withId(R.id.name_text_input_layout)).check(
-            matches(hasTextInputLayoutError(R.string.missing_name_error))
+        onView(withId(R.id.name_form_input)).check(
+                matches(hasFormInputError(R.string.missing_name_error))
         )
-        onView(withId(R.id.email_text_input_layout)).check(
-            matches(hasTextInputLayoutError(R.string.missing_email_error))
+        onView(withId(R.id.email_form_input)).check(
+                matches(hasFormInputError(R.string.missing_email_error))
         )
-        onView(withId(R.id.password_text_input_layout)).check(
-            matches(hasTextInputLayoutError(R.string.missing_password_error))
+        onView(withId(R.id.password_form_input)).check(
+                matches(hasFormInputError(R.string.missing_password_error))
         )
-        onView(withId(R.id.password_confirmation_text_input_layout)).check(
-            matches(hasTextInputLayoutError(R.string.missing_confirm_password_error))
+        onView(withId(R.id.password_confirmation_form_input)).check(
+                matches(hasFormInputError(R.string.missing_confirm_password_error))
         )
-        onView(withId(R.id.gender_text_input_layout)).check(
-            matches(hasTextInputLayoutError(R.string.missing_gender_error))
+        onView(withId(R.id.gender_form_input)).check(
+                matches(hasFormInputError(R.string.missing_gender_error))
         )
     }
 
     @Test
     fun signUpInvalidEmailTest() {
         scenario.recreate()
-        scrollAndTypeText(R.id.email_edit_text, "hello@world")
+        scrollAndTypeText(R.id.email_form_input, "hello@world")
         signUp()
-        onView(withId(R.id.email_text_input_layout)).check(
-                matches(hasTextInputLayoutError(R.string.email_not_valid_error))
+        onView(withId(R.id.email_form_input)).check(
+                matches(hasFormInputError(R.string.email_not_valid_error))
         )
     }
 
     @Test
     fun signUpShortPasswordTest() {
         scenario.recreate()
-        scrollAndTypeText(R.id.password_edit_text, "12345")
+        scrollAndTypeText(R.id.password_form_input, "12345")
         signUp()
-        onView(withId(R.id.password_text_input_layout)).check(
-                matches(hasTextInputLayoutError(R.string.short_password_error))
+        onView(withId(R.id.password_form_input)).check(
+                matches(hasFormInputError(R.string.short_password_error))
         )
     }
 
     @Test
     fun signUpPasswordDoesNotMatchTest() {
         scenario.recreate()
-        scrollAndTypeText(R.id.password_edit_text, "12345678")
-        scrollAndTypeText(R.id.password_confirmation_edit_text, "12345679")
+        scrollAndTypeText(R.id.password_form_input, "12345678")
+        scrollAndTypeText(R.id.password_confirmation_form_input, "12345679")
         signUp()
-        onView(withId(R.id.password_confirmation_text_input_layout)).check(
-                matches(hasTextInputLayoutError(R.string.confirm_password_match_error))
+        onView(withId(R.id.password_confirmation_form_input)).check(
+                matches(hasFormInputError(R.string.confirm_password_match_error))
         )
     }
 
@@ -135,10 +135,10 @@ class SignUpActivityTest : BaseTests() {
         val wrongTestUser = testUser.copy(email = "test@test")
         populateUserData(wrongTestUser)
         signUp()
-        onView(withId(R.id.email_text_input_layout)).check(
-                matches(hasTextInputLayoutError(R.string.email_not_valid_error))
+        onView(withId(R.id.email_form_input)).check(
+                matches(hasFormInputError(R.string.email_not_valid_error))
         )
-        scrollAndTypeText(R.id.email_edit_text, testUser.email)
+        scrollAndTypeText(R.id.email_form_input, testUser.email)
         signUp()
         val user = sessionManager.user
         assertEquals(user, testUser)
@@ -148,23 +148,12 @@ class SignUpActivityTest : BaseTests() {
         }
     }
 
-    @Test
-    fun backToSignInNavigation() {
-        signInScenario.recreate()
-        onView(withId(R.id.sign_up_text_view)).perform(click())
-        onView(withId(R.id.sign_in_text_view)).perform(click())
-        signInActivity.runOnUiThread {
-            val current = currentActivity()
-            assertEquals(SignInActivity::class.java.name, current::class.java.name)
-        }
-    }
-
     private fun populateUserData(user: User) {
-        scrollAndTypeText(R.id.name_edit_text, user.firstName)
-        scrollAndTypeText(R.id.email_edit_text, user.email)
-        scrollAndTypeText(R.id.password_edit_text, user.password)
-        scrollAndTypeText(R.id.password_confirmation_edit_text, user.password)
-        scrollAndSelectItem(R.id.gender_edit_text, user.gender)
+        scrollAndTypeText(R.id.name_form_input, user.firstName)
+        scrollAndTypeText(R.id.email_form_input, user.email)
+        scrollAndTypeText(R.id.password_form_input, user.password)
+        scrollAndTypeText(R.id.password_confirmation_form_input, user.password)
+        scrollAndSelectItem(R.id.gender_form_input, user.gender)
     }
 
     private fun signUp() {
@@ -177,7 +166,7 @@ class SignUpActivityTest : BaseTests() {
                 return if (request.path!!.contains("users")) {
                     val userResponse = UserSerializer(testUser())
                     mockServer.successfulResponse().setBody(
-                        Gson().toJson(userResponse)
+                            Gson().toJson(userResponse)
                     )
                 } else
                     mockServer.notFoundResponse()
@@ -194,6 +183,15 @@ class SignUpActivityTest : BaseTests() {
                     mockServer.notFoundResponse()
             }
         }
+    }
+
+    override fun scrollAndTypeText(id: Int, text: String) {
+        onView(withId(id)).perform(
+                scrollTo(),
+                ClearTextOnFormInput(),
+                TypeTextOnFormInput(text),
+                closeSoftKeyboard()
+        )
     }
 
     @After

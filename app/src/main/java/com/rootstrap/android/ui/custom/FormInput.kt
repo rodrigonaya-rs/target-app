@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -88,7 +89,7 @@ class FormInput @JvmOverloads constructor(
     }
 
     fun validateIsEmail(errorMessageResource: Int): Boolean {
-        if (binding.inputEditText.isNotEmpty() && binding.inputEditText.value().isEmail()) {
+        if (binding.inputEditText.isNotEmpty() && !binding.inputEditText.value().isEmail()) {
             setError(errorMessageResource)
             return false
         }
@@ -115,6 +116,13 @@ class FormInput @JvmOverloads constructor(
 
         clearError()
         return true
+    }
+
+    fun getError(): String? {
+        if (binding.errorTextView.visibility == View.VISIBLE)
+            return binding.errorTextView.text.toString()
+
+        return null
     }
 
     private fun setError(errorResource: Int) {
