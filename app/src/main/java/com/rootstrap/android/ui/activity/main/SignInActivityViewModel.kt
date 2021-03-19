@@ -45,7 +45,6 @@ open class SignInActivityViewModel @ViewModelInject constructor(
         } else null
 
         _networkState.value = NetworkState.idle
-        _networkState.value = NetworkState.error
         _state.value = SignInState.signInFailure
     }
 }
