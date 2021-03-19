@@ -1,9 +1,12 @@
 package com.rootstrap.android.utils
 
 import android.view.View
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.rootstrap.android.ui.custom.FormInput
 import org.hamcrest.Description
@@ -37,6 +40,23 @@ class TypeTextOnFormInput(private val text: String) : ViewAction {
         val formInput = view as FormInput
         formInput.setText(text)
     }
+}
+
+fun scrollAndTypeTextOnFormInput(id: Int, text: String) {
+    Espresso.onView(ViewMatchers.withId(id)).perform(
+        ViewActions.scrollTo(),
+        ClearTextOnFormInput(),
+        TypeTextOnFormInput(text),
+        ViewActions.closeSoftKeyboard()
+    )
+}
+
+fun typeTextOnFormInput(id: Int, text: String) {
+    Espresso.onView(ViewMatchers.withId(id)).perform(
+        ClearTextOnFormInput(),
+        TypeTextOnFormInput(text),
+        ViewActions.closeSoftKeyboard()
+    )
 }
 
 fun hasFormInputError(expectedError: Int): Matcher<View> {

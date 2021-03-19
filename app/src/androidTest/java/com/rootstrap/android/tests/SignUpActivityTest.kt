@@ -3,8 +3,6 @@ package com.rootstrap.android.tests
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -17,9 +15,8 @@ import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.ui.activity.main.ProfileActivity
 import com.rootstrap.android.ui.activity.main.SignUpActivity
 import com.rootstrap.android.utils.BaseTests
-import com.rootstrap.android.utils.ClearTextOnFormInput
-import com.rootstrap.android.utils.TypeTextOnFormInput
 import com.rootstrap.android.utils.hasFormInputError
+import com.rootstrap.android.utils.scrollAndTypeTextOnFormInput
 import dagger.hilt.android.testing.HiltAndroidTest
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -99,7 +96,7 @@ class SignUpActivityTest : BaseTests() {
     @Test
     fun signUpInvalidEmailTest() {
         scenario.recreate()
-        scrollAndTypeText(R.id.email_form_input, "hello@world")
+        scrollAndTypeTextOnFormInput(R.id.email_form_input, "hello@world")
         signUp()
         onView(withId(R.id.email_form_input)).check(
                 matches(hasFormInputError(R.string.email_not_valid_error))
@@ -109,7 +106,7 @@ class SignUpActivityTest : BaseTests() {
     @Test
     fun signUpShortPasswordTest() {
         scenario.recreate()
-        scrollAndTypeText(R.id.password_form_input, "12345")
+        scrollAndTypeTextOnFormInput(R.id.password_form_input, "12345")
         signUp()
         onView(withId(R.id.password_form_input)).check(
                 matches(hasFormInputError(R.string.short_password_error))
@@ -119,8 +116,8 @@ class SignUpActivityTest : BaseTests() {
     @Test
     fun signUpPasswordDoesNotMatchTest() {
         scenario.recreate()
-        scrollAndTypeText(R.id.password_form_input, "12345678")
-        scrollAndTypeText(R.id.password_confirmation_form_input, "12345679")
+        scrollAndTypeTextOnFormInput(R.id.password_form_input, "12345678")
+        scrollAndTypeTextOnFormInput(R.id.password_confirmation_form_input, "12345679")
         signUp()
         onView(withId(R.id.password_confirmation_form_input)).check(
                 matches(hasFormInputError(R.string.confirm_password_match_error))
@@ -138,7 +135,7 @@ class SignUpActivityTest : BaseTests() {
         onView(withId(R.id.email_form_input)).check(
                 matches(hasFormInputError(R.string.email_not_valid_error))
         )
-        scrollAndTypeText(R.id.email_form_input, testUser.email)
+        scrollAndTypeTextOnFormInput(R.id.email_form_input, testUser.email)
         signUp()
         val user = sessionManager.user
         assertEquals(user, testUser)
@@ -149,10 +146,10 @@ class SignUpActivityTest : BaseTests() {
     }
 
     private fun populateUserData(user: User) {
-        scrollAndTypeText(R.id.name_form_input, user.firstName)
-        scrollAndTypeText(R.id.email_form_input, user.email)
-        scrollAndTypeText(R.id.password_form_input, user.password)
-        scrollAndTypeText(R.id.password_confirmation_form_input, user.password)
+        scrollAndTypeTextOnFormInput(R.id.name_form_input, user.firstName)
+        scrollAndTypeTextOnFormInput(R.id.email_form_input, user.email)
+        scrollAndTypeTextOnFormInput(R.id.password_form_input, user.password)
+        scrollAndTypeTextOnFormInput(R.id.password_confirmation_form_input, user.password)
         scrollAndSelectItem(R.id.gender_form_input, user.gender)
     }
 
@@ -183,15 +180,6 @@ class SignUpActivityTest : BaseTests() {
                     mockServer.notFoundResponse()
             }
         }
-    }
-
-    override fun scrollAndTypeText(id: Int, text: String) {
-        onView(withId(id)).perform(
-                scrollTo(),
-                ClearTextOnFormInput(),
-                TypeTextOnFormInput(text),
-                closeSoftKeyboard()
-        )
     }
 
     @After

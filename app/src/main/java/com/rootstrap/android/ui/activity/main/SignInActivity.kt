@@ -48,9 +48,19 @@ class SignInActivity : PermissionActivity(), AuthView {
 
     private fun signIn() {
         with(binding) {
+
+            val validationResult = listOf(
+                emailFormInput.validateNotEmpty(R.string.missing_email_error) &&
+                emailFormInput.validateIsEmail(R.string.email_not_valid_error),
+                passwordFormInput.validateNotEmpty(R.string.missing_password_error)
+            )
+
+            if (validationResult.contains(false))
+                return
+
             val user = User(
-                email = emailEditText.value(),
-                password = passwordEditText.value()
+                email = emailFormInput.value(),
+                password = passwordFormInput.value()
             )
             viewModel.signIn(user)
         }
