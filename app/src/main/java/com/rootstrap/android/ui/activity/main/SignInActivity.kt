@@ -49,8 +49,8 @@ class SignInActivity : PermissionActivity(), AuthView {
     private fun signIn() {
         with(binding) {
             val user = User(
-                email = emailEditText.value(),
-                password = passwordEditText.value()
+                email = emailFormInput.value(),
+                password = passwordFormInput.value()
             )
             viewModel.signIn(user)
         }
