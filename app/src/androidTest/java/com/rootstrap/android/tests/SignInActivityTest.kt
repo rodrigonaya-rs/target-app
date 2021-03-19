@@ -7,6 +7,7 @@ import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.ui.activity.main.ProfileActivity
 import com.rootstrap.android.ui.activity.main.SignInActivity
 import com.rootstrap.android.utils.BaseTests
+import com.rootstrap.android.utils.typeTextOnFormInput
 import dagger.hilt.android.testing.HiltAndroidTest
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -34,8 +35,8 @@ class SignInActivityTest : BaseTests() {
         scenario.recreate()
         setServerDispatch(signInDispatcher())
         val testUser = testUser()
-        typeText(R.id.email_edit_text, testUser.email)
-        typeText(R.id.password_edit_text, testUser.password)
+        typeTextOnFormInput(R.id.email_form_input, testUser.email)
+        typeTextOnFormInput(R.id.password_form_input, testUser.password)
         performClick(R.id.sign_in_button)
         val user = sessionManager.user
         assertEquals(user, testUser)
