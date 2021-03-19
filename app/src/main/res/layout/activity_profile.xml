@@ -19,7 +19,7 @@
         android:id="@+id/sign_out_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_button_height"
-        android:layout_marginTop="@dimen/text_input_margin_top"
+        android:layout_marginTop="@dimen/text_input_margin"
         android:background="@color/colorAccent"
         android:text="@string/sign_out"
         android:textColor="@android:color/white"
