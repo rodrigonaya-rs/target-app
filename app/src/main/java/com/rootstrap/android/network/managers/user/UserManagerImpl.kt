@@ -1,5 +1,6 @@
 package com.rootstrap.android.network.managers.user
 
+import com.rootstrap.android.network.models.FacebookSignIn
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.network.models.UserSerializer
 import com.rootstrap.android.network.models.UserSignUpRequest
@@ -19,6 +20,9 @@ class UserManagerImpl @Inject constructor(private val service: ApiService) : Use
 
     override suspend fun signIn(user: User): Result<Data<UserSerializer>> =
         ActionCallback.call(service.signIn(UserSerializer(user)))
+
+    override suspend fun signInWithFacebook(accessToken: String): Result<Data<UserSerializer>> =
+        ActionCallback.call(service.signInWithFacebook(FacebookSignIn(accessToken)))
 
     override suspend fun signOut(): Result<Data<Void>> =
         ActionCallback.call(service.signOut())

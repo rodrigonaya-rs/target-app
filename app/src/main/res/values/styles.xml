@@ -23,6 +23,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Text.Subtitle" parent="Text.Title">
+        <item name="android:letterSpacing">0.2</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Text.Body" parent="Text.Title">
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">11sp</item>

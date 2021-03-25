@@ -39,6 +39,23 @@ open class SignInActivityViewModel @ViewModelInject constructor(
         }
     }
 
+    fun signInWithFacebook(accessToken: String) {
+        _networkState.value = NetworkState.loading
+        viewModelScope.launch {
+            val result = userManager.signInWithFacebook(accessToken)
+            if (result.isSuccess) {
+                result.getOrNull()?.value?.user?.let { user ->
+                    sessionManager.signIn(user)
+                }
+
+                _networkState.value = NetworkState.idle
+                _state.value = SignInState.signInSuccess
+            } else {
+                handleError(result.exceptionOrNull())
+            }
+        }
+    }
+
     private fun handleError(exception: Throwable?) {
         error = if (exception is ApiException && exception.errorType == ApiErrorType.apiError) {
             exception.message

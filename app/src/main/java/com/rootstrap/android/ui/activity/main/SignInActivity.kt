@@ -1,10 +1,15 @@
 package com.rootstrap.android.ui.activity.main
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.rootstrap.android.R
 import com.rootstrap.android.databinding.ActivitySignInBinding
 import com.rootstrap.android.metrics.Analytics
@@ -13,9 +18,7 @@ import com.rootstrap.android.metrics.VISIT_SIGN_IN
 import com.rootstrap.android.network.models.User
 import com.rootstrap.android.ui.view.AuthView
 import com.rootstrap.android.util.NetworkState
-import com.rootstrap.android.util.extensions.value
 import com.rootstrap.android.util.permissions.PermissionActivity
-import com.rootstrap.android.util.permissions.PermissionResponse
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,6 +26,7 @@ class SignInActivity : PermissionActivity(), AuthView {
 
     private val viewModel: SignInActivityViewModel by viewModels()
     private lateinit var binding: ActivitySignInBinding
+    private lateinit var callbackManager: CallbackManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +39,11 @@ class SignInActivity : PermissionActivity(), AuthView {
             signInButton.setOnClickListener { signIn() }
             signUpTextView.setOnClickListener { signUp() }
         }
+        setUpFacebookAuthentication()
 
         lifecycle.addObserver(viewModel)
 
         setObservers()
-        sampleAskForPermission()
     }
 
     override fun showProfile() {
@@ -51,7 +55,7 @@ class SignInActivity : PermissionActivity(), AuthView {
 
             val validationResult = listOf(
                 emailFormInput.validateNotEmpty(R.string.missing_email_error) &&
-                emailFormInput.validateIsEmail(R.string.email_not_valid_error),
+                        emailFormInput.validateIsEmail(R.string.email_not_valid_error),
                 passwordFormInput.validateNotEmpty(R.string.missing_password_error)
             )
 
@@ -64,6 +68,41 @@ class SignInActivity : PermissionActivity(), AuthView {
             )
             viewModel.signIn(user)
         }
+    }
+
+    private fun setUpFacebookAuthentication() {
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance()
+            .registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult?) {
+                    result?.accessToken?.let {
+                        viewModel.signInWithFacebook(it.token)
+                        return
+                    }
+
+                    this.onError(FacebookException())
+                }
+
+                override fun onCancel() {}
+
+                override fun onError(error: FacebookException?) {
+                    Toast.makeText(
+                        this@SignInActivity,
+                        getString(
+                            R.string.facebook_login_error,
+                            error?.message ?: getString(R.string.default_error)
+                        ),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+        with(binding) {
+            facebookAuthenticationTextView.setOnClickListener { facebookAuthentication() }
+        }
+    }
+
+    private fun facebookAuthentication() {
+        LoginManager.getInstance().logInWithReadPermissions(this, listOf("email"))
     }
 
     private fun signUp() {
@@ -87,19 +126,8 @@ class SignInActivity : PermissionActivity(), AuthView {
         })
     }
 
-    private fun sampleAskForPermission() {
-        requestPermission(arrayOf(Manifest.permission.CAMERA), object : PermissionResponse {
-            override fun granted() {
-                // TODO..
-            }
-
-            override fun denied() {
-                // TODO..
-            }
-
-            override fun foreverDenied() {
-                // TODO..
-            }
-        })
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

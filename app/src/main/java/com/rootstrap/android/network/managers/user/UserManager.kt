@@ -8,5 +8,6 @@ import com.rootstrap.android.util.extensions.Data
 interface UserManager {
     suspend fun signUp(userSignUpRequest: UserSignUpRequest): Result<Data<UserSerializer>>
     suspend fun signIn(user: User): Result<Data<UserSerializer>>
+    suspend fun signInWithFacebook(accessToken: String): Result<Data<UserSerializer>>
     suspend fun signOut(): Result<Data<Void>>
 }

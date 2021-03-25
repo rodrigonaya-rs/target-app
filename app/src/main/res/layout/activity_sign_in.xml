@@ -67,17 +67,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_form_input" />
 
+        <TextView
+            android:id="@+id/facebook_authentication_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            style="@style/Text.Subtitle"
+            android:text="@string/connect_with_facebook"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+
         <View
             android:id="@+id/divider_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/sign_up_margin_horizontal"
-            android:layout_marginTop="@dimen/text_input_margin"
+            android:layout_marginBottom="@dimen/text_input_margin"
             android:layout_marginEnd="@dimen/sign_up_margin_horizontal"
             android:background="@android:color/black"
             app:layout_constraintEnd_toEndOf="@id/sign_in_button"
             app:layout_constraintStart_toStartOf="@id/sign_in_button"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_button" />
+            app:layout_constraintBottom_toTopOf="@id/sign_up_text_view" />
 
         <TextView
             android:id="@+id/sign_up_text_view"
@@ -88,7 +99,7 @@
             android:text="@string/sign_up"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_view" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
